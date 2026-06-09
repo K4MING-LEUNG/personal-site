@@ -283,7 +283,7 @@ function GameView() {
           {game.meta && <div className="font-mono text-[11px] text-ink-2 mt-1">{game.meta}</div>}
         </div>
         <a
-          href={game.embed}
+          href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${game.embed}`}
           target="_blank"
           rel="noreferrer"
           className="font-mono text-[11px] tracking-wider text-bronze-d hover:text-vermilion transition-colors"
@@ -293,7 +293,7 @@ function GameView() {
       </div>
       <div className="rounded-lg overflow-hidden border border-rule bg-ink shadow-inner">
         <iframe
-          src={game.embed}
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${game.embed}`}
           title={game.title}
           className="w-full"
           style={{ height: "640px", border: 0 }}
