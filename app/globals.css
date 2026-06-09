@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Manus-inspired warm cream palette */
+  --paper: #f5f1eb;
+  --paper-2: #ede8e0;
+  --paper-3: #e3dcd0;
+  --ink: #1f1b16;
+  --ink-2: #6b6358;
+  --ink-3: #9a9082;
+  --bronze: #c9a961;
+  --bronze-d: #a88940;
+  --moss: #2b4c3f;
+  --vermilion: #b94e3d;
+  --rule: #d9d2c5;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-bronze: var(--bronze);
+  --color-bronze-d: var(--bronze-d);
+  --color-moss: var(--moss);
+  --color-vermilion: var(--vermilion);
+  --color-rule: var(--rule);
+
+  --font-serif: var(--font-noto-serif-sc), "Songti SC", "STSong", Georgia, serif;
+  --font-sans: var(--font-noto-sans-sc), var(--font-inter), "PingFang SC", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "SFMono-Regular", Menlo, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html, body { height: 100%; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(201,169,97,0.06), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(43,76,63,0.05), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Subtle paper grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Custom selection */
+::selection {
+  background: var(--bronze);
+  color: var(--paper);
+}
+
+/* Headings prefer serif */
+h1, h2, h3, .serif {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* Smooth scroll respected from CSS, Next 16 no longer overrides unless we ask */
+html { scroll-behavior: smooth; }
+
+/* Stamp / seal accent */
+.seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em;
+  height: 1.6em;
+  border: 1.5px solid var(--vermilion);
+  color: var(--vermilion);
+  font-family: var(--font-serif);
+  font-size: 0.7em;
+  border-radius: 4px;
+  transform: rotate(-4deg);
+  letter-spacing: 0.05em;
 }

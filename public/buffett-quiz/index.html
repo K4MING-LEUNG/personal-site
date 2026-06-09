@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>电子巴菲特 · 与先知对谈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0f1024;--bg2:#1a1a2e;--card:#16213e;--card2:#1f2a4d;
+    --gold:#ffd75e;--gold-d:#c99a1f;
+    --green:#4ade80;--red:#ef4444;--cream:#f5e6d3;--shadow:#05050f;
+  }
+  html,body{height:100%}
+  body{
+    background:
+      linear-gradient(rgba(255,215,94,.04) 2px,transparent 2px) 0 0/32px 32px,
+      linear-gradient(90deg,rgba(255,215,94,.04) 2px,transparent 2px) 0 0/32px 32px,
+      var(--bg);
+    color:var(--cream);
+    font-family:'Noto Sans SC',system-ui,sans-serif;font-weight:500;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:16px;overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{width:100%;max-width:760px;position:relative}
+  .screen{display:none}
+  .screen.active{display:block;animation:fadeIn .3s steps(4)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ============ TITLE ============ */
+  #title{position:relative;padding:4px}
+  .bg-coins{position:absolute;inset:-20px;pointer-events:none;overflow:hidden;z-index:0}
+  .bg-coin{
+    position:absolute;top:-60px;left:var(--x);
+    font-family:'Press Start 2P',monospace;
+    font-size:calc(18px*var(--s,1));color:var(--gold);opacity:.16;
+    text-shadow:2px 2px 0 var(--shadow);
+    animation:coinFall 9s linear infinite;animation-delay:var(--d,0s);
+  }
+  @keyframes coinFall{
+    0%{transform:translateY(0) rotate(0);opacity:0}
+    8%{opacity:.18}92%{opacity:.18}
+    100%{transform:translateY(120vh) rotate(360deg);opacity:0}
+  }
+  .title-card{
+    position:relative;z-index:1;
+    background:linear-gradient(180deg,#1d2a52 0%,#141a36 100%);
+    border:4px solid var(--cream);
+    box-shadow:0 0 0 4px var(--shadow),0 0 0 8px var(--gold),10px 10px 0 8px var(--shadow);
+    padding:40px 32px 28px;text-align:center;max-width:540px;margin:0 auto;
+  }
+  .title-card::before{
+    content:"";position:absolute;top:8px;left:8px;right:8px;bottom:8px;
+    border:1px dashed rgba(255,215,94,.25);pointer-events:none;
+  }
+  .logo{
+    width:104px;height:104px;margin:0 auto 22px;
+    background:linear-gradient(180deg,var(--gold) 0%,var(--gold-d) 100%);
+    border:4px solid var(--shadow);
+    box-shadow:inset 0 4px 0 0 rgba(255,255,255,.25),inset 0 -8px 0 0 rgba(0,0,0,.2),6px 6px 0 0 var(--shadow);
+    display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  .tophat{width:76px;height:76px;image-rendering:pixelated;display:block}
+  .logo-text{
+    font-family:'Press Start 2P',monospace;
+    font-size:clamp(18px,4.2vw,26px);color:var(--gold);
+    text-shadow:3px 3px 0 var(--shadow),6px 6px 0 rgba(0,0,0,.45);
+    letter-spacing:2px;margin-bottom:8px;line-height:1.3;
+  }
+  .logo-divider{font-size:10px;letter-spacing:12px;color:var(--gold-d);margin:4px 0 8px;padding-left:12px}
+  .logo-cn{font-size:15px;color:var(--cream);letter-spacing:2px;margin-bottom:22px;opacity:.92;font-weight:700}
+  .tagline{
+    font-size:15px;font-style:italic;color:var(--cream);
+    padding:14px 12px;margin:0 0 22px;
+    border-top:2px solid rgba(255,215,94,.28);border-bottom:2px solid rgba(255,215,94,.28);line-height:1.7;
+  }
+  .tagline .by{display:block;margin-top:6px;font-size:12px;opacity:.7;font-style:normal;letter-spacing:2px}
+  .features{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:26px}
+  .feat{background:rgba(0,0,0,.28);border:3px solid var(--shadow);padding:10px 4px 8px;box-shadow:3px 3px 0 0 var(--shadow)}
+  .feat-icon{font-size:22px;line-height:1;margin-bottom:6px}
+  .feat-label{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--gold);letter-spacing:1px}
+
+  /* ============ Buttons ============ */
+  .btn{
+    display:inline-block;font-family:'Press Start 2P',monospace;
+    font-size:14px;letter-spacing:1px;color:var(--shadow);
+    background:var(--gold);border:4px solid var(--shadow);
+    padding:14px 22px;cursor:pointer;
+    box-shadow:6px 6px 0 0 var(--shadow);
+    transition:transform .08s steps(2),box-shadow .08s steps(2);user-select:none;
+  }
+  .btn:hover{transform:translate(2px,2px);box-shadow:4px 4px 0 0 var(--shadow)}
+  .btn:active{transform:translate(6px,6px);box-shadow:0 0 0 0 var(--shadow)}
+  .btn.green{background:var(--green);color:#06250f}
+  .btn.cream{background:var(--cream)}
+  .btn-hero{font-size:15px;padding:16px 38px;letter-spacing:3px}
+  .btn-mini{
+    background:var(--cream);color:var(--shadow);
+    border:3px solid var(--shadow);padding:7px 12px;
+    font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:13px;
+    cursor:pointer;box-shadow:3px 3px 0 0 var(--shadow);
+    transition:transform .08s steps(2),box-shadow .08s steps(2);user-select:none;
+  }
+  .btn-mini:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 0 var(--shadow)}
+  .btn-mini:active{transform:translate(3px,3px);box-shadow:0 0 0 0 var(--shadow)}
+  .footer-tip{text-align:center;font-size:11px;color:#7c83a8;margin-top:18px}
+
+  /* ============ GAME / Visual Novel ============ */
+  #game{position:relative}
+  .game-toolbar{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;
+  }
+  .hud{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .hud-cell{
+    background:var(--card2);border:3px solid var(--shadow);padding:6px 10px;
+    font-family:'Press Start 2P',monospace;font-size:11px;
+    box-shadow:3px 3px 0 0 var(--shadow);display:flex;align-items:center;gap:6px;
+  }
+  .hearts{display:flex;gap:3px;font-size:14px}
+  .heart.dead{filter:grayscale(1) brightness(.4)}
+  .heart.losing{animation:heartLose .6s steps(6) forwards}
+  @keyframes heartLose{
+    0%{transform:scale(1)}30%{transform:scale(1.6) rotate(-10deg)}
+    60%{transform:scale(.6) rotate(20deg);filter:grayscale(1)}
+    100%{transform:scale(1);filter:grayscale(1) brightness(.4)}
+  }
+  .pocket{display:flex;align-items:center;gap:6px;font-size:16px}
+  .pocket .coin-count{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--gold)}
+  .pocket.bump{animation:bump .35s steps(4)}
+  @keyframes bump{0%,100%{transform:scale(1)}40%{transform:scale(1.4) rotate(-6deg)}70%{transform:scale(.9)}}
+
+  /* progress bar */
+  .progress-wrap{
+    width:100%;height:14px;background:var(--card2);
+    border:3px solid var(--shadow);margin-bottom:14px;
+    box-shadow:3px 3px 0 0 var(--shadow);position:relative;
+  }
+  .progress-bar{
+    height:100%;width:0%;background:var(--gold);
+    background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.15) 0 6px,transparent 6px 12px);
+    transition:width .4s steps(8);
+  }
+  .progress-label{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Press Start 2P',monospace;font-size:9px;color:var(--shadow);
+  }
+
+  /* ===== VN stage: portrait + dialogue ===== */
+  .vn-stage{
+    position:relative;background:linear-gradient(180deg,#1f2a52 0%,#0f1530 100%);
+    border:4px solid var(--cream);
+    box-shadow:0 0 0 4px var(--shadow),0 0 0 8px var(--gold),8px 8px 0 8px var(--shadow);
+    padding:28px 22px 22px;
+  }
+  /* faint floor line */
+  .vn-stage::before{
+    content:"";position:absolute;left:8px;right:8px;bottom:200px;height:0;
+    border-bottom:2px dashed rgba(255,215,94,.12);
+  }
+  .vn-portrait-wrap{
+    display:flex;justify-content:center;align-items:flex-end;
+    min-height:280px;margin-bottom:14px;position:relative;
+  }
+  .vn-portrait-platform{
+    position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);
+    width:200px;height:14px;background:rgba(0,0,0,.35);
+    border-radius:50%;filter:blur(2px);
+  }
+  .buffett{
+    width:240px;height:300px;image-rendering:pixelated;
+    filter:drop-shadow(4px 4px 0 var(--shadow));
+    animation:idle 3s ease-in-out infinite;
+  }
+  @keyframes idle{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-4px)}
+  }
+  .buffett.talking{animation:talk .4s steps(2) infinite}
+  @keyframes talk{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+  /* emotion variants */
+  .buffett .eyes-wink,.buffett .eyes-squint,.buffett .mouth-smile,.buffett .mouth-stern,.buffett .mouth-talk{display:none}
+  .buffett.emo-smile .mouth-normal{display:none}
+  .buffett.emo-smile .mouth-smile{display:initial}
+  .buffett.emo-wink  .mouth-normal{display:none}
+  .buffett.emo-wink  .mouth-smile{display:initial}
+  .buffett.emo-wink  .eyes-open{display:none}
+  .buffett.emo-wink  .eyes-wink{display:initial}
+  .buffett.emo-stern .mouth-normal{display:none}
+  .buffett.emo-stern .mouth-stern{display:initial}
+  .buffett.emo-thinking .eyes-open{display:none}
+  .buffett.emo-thinking .eyes-squint{display:initial}
+  .buffett.talking .mouth-normal,.buffett.talking .mouth-smile,.buffett.talking .mouth-stern{display:none}
+  .buffett.talking .mouth-talk{display:initial}
+
+  /* speaker tag */
+  .vn-speaker{
+    position:absolute;left:18px;top:-18px;
+    background:var(--gold);color:var(--shadow);
+    border:3px solid var(--shadow);
+    font-family:'Press Start 2P',monospace;font-size:12px;letter-spacing:2px;
+    padding:7px 14px;box-shadow:3px 3px 0 0 var(--shadow);
+    z-index:2;
+  }
+
+  /* dialogue box */
+  .vn-dialogue{
+    background:rgba(0,0,0,.55);
+    border:3px solid var(--cream);
+    box-shadow:inset 0 0 0 1px var(--gold-d),4px 4px 0 0 var(--shadow);
+    padding:22px 22px 18px;min-height:130px;position:relative;cursor:pointer;
+  }
+  .vn-dialogue.no-cursor{cursor:default}
+  .vn-text{
+    font-size:16px;line-height:1.85;color:var(--cream);font-weight:700;
+    white-space:pre-wrap;letter-spacing:.5px;min-height:60px;
+  }
+  .vn-text .caret{
+    display:inline-block;width:8px;height:18px;background:var(--cream);
+    vertical-align:-3px;margin-left:2px;animation:caret .8s steps(2) infinite;
+  }
+  @keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+  .vn-advance{
+    position:absolute;right:14px;bottom:8px;
+    font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);
+    text-shadow:2px 2px 0 var(--shadow);
+    animation:bounce 1s steps(4) infinite;
+  }
+  .vn-advance.hide{display:none}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  /* quote style — golden box */
+  .vn-text.quote{
+    color:var(--gold);font-style:italic;
+    background:rgba(255,215,94,.06);
+    border-left:4px solid var(--gold);padding:10px 12px;margin:2px 0;
+    text-shadow:1px 1px 0 var(--shadow);
+  }
+  .vn-text.quote::before{content:"❝ ";color:var(--gold-d)}
+  .vn-text.quote::after{content:" ❞";color:var(--gold-d)}
+
+  /* choices */
+  .vn-choices{
+    display:none;flex-direction:column;gap:10px;margin-top:14px;
+  }
+  .vn-choices.show{display:flex;animation:fadeIn .35s steps(4)}
+  .vn-choice{
+    text-align:left;background:rgba(31,42,77,.85);color:var(--cream);
+    border:3px solid var(--shadow);padding:12px 14px 12px 44px;
+    cursor:pointer;font-family:inherit;font-weight:700;font-size:15px;line-height:1.5;
+    box-shadow:4px 4px 0 0 var(--shadow);position:relative;
+    transition:transform .08s steps(2),background .15s;
+  }
+  .vn-choice::before{
+    content:"▶";position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:var(--gold);font-size:14px;
+  }
+  .vn-choice::after{
+    content:attr(data-key);position:absolute;left:32px;top:50%;transform:translateY(-50%);
+    color:var(--gold-d);font-family:'Press Start 2P',monospace;font-size:9px;
+  }
+  .vn-choice:hover:not(.locked){transform:translate(2px,2px);box-shadow:2px 2px 0 0 var(--shadow);background:rgba(45,60,110,.9)}
+  .vn-choice.locked{cursor:default}
+  .vn-choice.correct{background:var(--green);color:#06250f;animation:flash .4s steps(4)}
+  .vn-choice.wrong{background:var(--red);color:#fff;animation:shake .4s steps(8)}
+  .vn-choice.dim{opacity:.45}
+  @keyframes flash{0%,100%{filter:brightness(1)}50%{filter:brightness(1.6)}}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}80%{transform:translateX(6px)}
+  }
+
+  /* money bag fly */
+  .bag{
+    position:absolute;font-size:48px;pointer-events:none;z-index:50;
+    filter:drop-shadow(3px 3px 0 var(--shadow));
+  }
+  @keyframes bagFly{
+    0%{transform:translate(-50%,-50%) scale(.4) rotate(-8deg);opacity:0}
+    15%{transform:translate(-50%,-50%) scale(1.4) rotate(0);opacity:1}
+    35%{transform:translate(-50%,20px) scale(1.4) rotate(0);opacity:1}
+    100%{transform:translate(var(--tx),var(--ty)) scale(.4) rotate(20deg);opacity:0}
+  }
+  .bag.fly{animation:bagFly 1.1s cubic-bezier(.4,.1,.6,1) forwards}
+  .score-pop{
+    position:absolute;font-family:'Press Start 2P',monospace;color:var(--gold);
+    font-size:14px;pointer-events:none;text-shadow:2px 2px 0 var(--shadow);
+    animation:scorePop .9s ease-out forwards;
+  }
+  @keyframes scorePop{
+    0%{opacity:0;transform:translateY(0) scale(.6)}
+    20%{opacity:1;transform:translateY(-10px) scale(1.2)}
+    100%{opacity:0;transform:translateY(-50px) scale(1)}
+  }
+
+  /* ============ END ============ */
+  #end{text-align:center}
+  .pixel-box{
+    background:var(--card);border:4px solid var(--cream);
+    box-shadow:0 0 0 4px var(--shadow),0 0 0 8px var(--gold),8px 8px 0 8px var(--shadow);
+    padding:24px;position:relative;
+  }
+  .medal{
+    width:140px;height:140px;margin:8px auto 16px;
+    background:var(--gold);border:6px solid var(--shadow);
+    box-shadow:0 8px 0 0 var(--shadow);
+    display:flex;align-items:center;justify-content:center;font-size:64px;
+    position:relative;animation:medalIn .6s steps(6);
+  }
+  @keyframes medalIn{0%{transform:scale(0) rotate(-90deg)}100%{transform:scale(1) rotate(0)}}
+  .tier-name{
+    font-family:'Press Start 2P',monospace;color:var(--gold);font-size:20px;
+    text-shadow:3px 3px 0 var(--shadow);margin-bottom:8px;
+  }
+  .tier-desc{font-size:16px;margin-bottom:12px;font-weight:700}
+  .stats{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:14px 0}
+  .stat{
+    background:var(--card2);border:4px solid var(--shadow);
+    box-shadow:4px 4px 0 0 var(--shadow);padding:10px 16px;min-width:110px;
+  }
+  .stat .v{font-family:'Press Start 2P',monospace;font-size:18px;color:var(--gold)}
+  .stat .k{font-size:12px;opacity:.8;margin-top:4px;font-weight:700}
+  .end-quote{
+    margin:18px 0;padding:14px;background:#0c1530;
+    border-left:6px solid var(--gold);color:var(--gold);font-style:italic;text-align:left;
+  }
+
+  /* ============ TRANSCRIPT side panel ============ */
+  .transcript-panel{
+    position:fixed;top:50%;right:-400px;transform:translateY(-50%);
+    width:min(340px,92vw);max-height:80vh;
+    background:rgba(15,16,36,.92);
+    border:3px solid var(--gold);
+    box-shadow:-6px 6px 0 0 var(--shadow);
+    padding:14px;display:flex;flex-direction:column;
+    transition:right .35s cubic-bezier(.4,0,.6,1);
+    z-index:200;backdrop-filter:blur(2px);
+  }
+  .transcript-panel.show{right:12px}
+  .transcript-head{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'Press Start 2P',monospace;font-size:11px;color:var(--gold);
+    padding-bottom:10px;border-bottom:2px solid rgba(255,215,94,.3);
+    margin-bottom:10px;letter-spacing:1px;
+  }
+  .transcript-close{
+    background:var(--gold);color:var(--shadow);
+    border:2px solid var(--shadow);padding:3px 8px;
+    font-family:'Press Start 2P',monospace;font-size:10px;
+    cursor:pointer;box-shadow:2px 2px 0 0 var(--shadow);
+  }
+  .transcript-close:active{transform:translate(2px,2px);box-shadow:0 0 0 0 var(--shadow)}
+  .transcript-body{
+    overflow-y:auto;padding-right:6px;
+    font-style:italic;font-size:13px;line-height:1.75;color:var(--cream);
+  }
+  .transcript-body::-webkit-scrollbar{width:8px}
+  .transcript-body::-webkit-scrollbar-track{background:rgba(0,0,0,.3)}
+  .transcript-body::-webkit-scrollbar-thumb{background:var(--gold-d);border:1px solid var(--shadow)}
+  .transcript-chapter{
+    font-family:'Press Start 2P',monospace;font-size:10px;color:var(--gold);
+    margin:14px 0 8px;letter-spacing:1px;font-style:normal;opacity:1;
+  }
+  .transcript-chapter:first-child{margin-top:0}
+  .transcript-entry{margin-bottom:8px;opacity:.55;white-space:pre-wrap}
+  .transcript-entry.quote{
+    color:var(--gold);border-left:3px solid var(--gold);
+    padding-left:8px;opacity:.78;
+  }
+  .transcript-entry.ask{
+    background:rgba(31,42,77,.5);padding:8px 10px;
+    border-left:3px solid var(--cream);opacity:.72;
+  }
+  .transcript-opt{
+    font-size:12px;margin-top:4px;padding-left:12px;opacity:.92;font-style:italic;
+  }
+  .transcript-entry.choice{
+    font-size:12px;font-style:normal;
+    padding:4px 8px;margin-bottom:14px;opacity:.9;
+  }
+  .transcript-entry.choice.right{color:var(--green)}
+  .transcript-entry.choice.wrong{color:var(--red)}
+  .transcript-empty{font-size:13px;text-align:center;padding:30px 0;opacity:.5}
+  @media(max-width:600px){
+    .transcript-panel.show{right:8px;left:8px;width:auto;transform:none;top:80px;max-height:calc(100vh - 100px)}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ TITLE ============ -->
+  <section id="title" class="screen active">
+    <div class="bg-coins" aria-hidden="true">
+      <span class="bg-coin" style="--d:0s;--x:6%;--s:1">$</span>
+      <span class="bg-coin" style="--d:1.4s;--x:18%;--s:.7">$</span>
+      <span class="bg-coin" style="--d:3.1s;--x:32%;--s:1.2">$</span>
+      <span class="bg-coin" style="--d:.7s;--x:48%;--s:.8">$</span>
+      <span class="bg-coin" style="--d:4.2s;--x:62%;--s:1.1">$</span>
+      <span class="bg-coin" style="--d:2.0s;--x:78%;--s:.9">$</span>
+      <span class="bg-coin" style="--d:5.5s;--x:90%;--s:1">$</span>
+    </div>
+
+    <div class="title-card">
+      <div class="logo" aria-hidden="true">
+        <svg class="tophat" viewBox="0 0 16 16" shape-rendering="crispEdges">
+          <rect x="4" y="2" width="8" height="1" fill="#0a0a0a"/>
+          <rect x="3" y="3" width="10" height="4" fill="#0a0a0a"/>
+          <rect x="5" y="3" width="1" height="2" fill="#3a3a3a"/>
+          <rect x="3" y="7" width="10" height="1" fill="#c41e3a"/>
+          <rect x="7" y="7" width="2" height="1" fill="#ffd75e"/>
+          <rect x="1" y="8" width="14" height="1" fill="#050505"/>
+          <rect x="0" y="9" width="16" height="1" fill="#050505"/>
+        </svg>
+      </div>
+      <h1 class="logo-text">ELECTRONIC<br/>BUFFETT</h1>
+      <div class="logo-divider">◆ ◆ ◆</div>
+      <p class="logo-cn">电子巴菲特 · 与先知对谈</p>
+      <p class="tagline">
+        "买股票，就是买<span style="color:var(--gold)">公司的一部分</span>。"
+        <span class="by">— WARREN BUFFETT</span>
+      </p>
+      <div class="features">
+        <div class="feat"><div class="feat-icon">💬</div><div class="feat-label">DIALOG</div></div>
+        <div class="feat"><div class="feat-icon">⚡</div><div class="feat-label">10 LV</div></div>
+        <div class="feat"><div class="feat-icon">❤️</div><div class="feat-label">3 HP</div></div>
+        <div class="feat"><div class="feat-icon">🎩</div><div class="feat-label">RANK</div></div>
+      </div>
+      <button class="btn btn-hero" id="startBtn">▶ PRESS START</button>
+      <p class="footer-tip">点击对话框继续 · 1/2/3/4 选项 · Enter 推进</p>
+    </div>
+  </section>
+
+  <!-- ============ GAME ============ -->
+  <section id="game" class="screen">
+    <div class="game-toolbar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-mini" id="menuBtn">🏠 返回目录</button>
+        <button class="btn-mini" id="transcriptBtn">📜 回顾</button>
+      </div>
+      <div class="hud">
+        <div class="hud-cell hearts" id="heartsBox">
+          <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
+        </div>
+        <div class="hud-cell pocket" id="pocket">💼<span class="coin-count" id="score">0</span></div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+      <div class="progress-label" id="progressLabel">PROLOGUE</div>
+    </div>
+
+    <div class="vn-stage">
+      <div class="vn-portrait-wrap">
+        <div class="vn-portrait-platform"></div>
+        <!-- Pixel Buffett -->
+        <svg class="buffett emo-normal" id="buffett" viewBox="0 0 64 80" shape-rendering="crispEdges">
+          <!-- HAT -->
+          <rect x="14" y="2"  width="36" height="22" fill="#0d0d0d"/>
+          <rect x="18" y="4"  width="3"  height="14" fill="#2a2a2a"/>
+          <rect x="14" y="20" width="36" height="3"  fill="#c41e3a"/>
+          <rect x="28" y="20" width="8"  height="3"  fill="#ffd75e"/>
+          <rect x="14" y="22" width="36" height="1"  fill="#7a1020"/>
+          <!-- BRIM -->
+          <rect x="6"  y="23" width="52" height="3"  fill="#050505"/>
+          <rect x="2"  y="25" width="60" height="2"  fill="#050505"/>
+          <!-- FACE skin -->
+          <rect x="14" y="27" width="36" height="24" fill="#e8b88a"/>
+          <rect x="44" y="27" width="6"  height="24" fill="#d49d6e"/>
+          <!-- HAIR sides (white/gray) -->
+          <rect x="10" y="30" width="6"  height="14" fill="#dcdcdc"/>
+          <rect x="48" y="30" width="6"  height="14" fill="#dcdcdc"/>
+          <rect x="11" y="44" width="3"  height="3"  fill="#dcdcdc"/>
+          <rect x="50" y="44" width="3"  height="3"  fill="#dcdcdc"/>
+          <!-- BROWS -->
+          <rect x="18" y="30" width="9"  height="2"  fill="#999"/>
+          <rect x="37" y="30" width="9"  height="2"  fill="#999"/>
+          <!-- WRINKLE hint -->
+          <rect x="32" y="40" width="3"  height="1"  fill="#c4936a"/>
+          <!-- GLASSES frame & lenses -->
+          <rect x="16" y="33" width="14" height="9"  fill="#fefefe"/>
+          <rect x="34" y="33" width="14" height="9"  fill="#fefefe"/>
+          <rect x="16" y="33" width="14" height="1"  fill="#0a0a0a"/>
+          <rect x="16" y="41" width="14" height="1"  fill="#0a0a0a"/>
+          <rect x="16" y="33" width="1"  height="9"  fill="#0a0a0a"/>
+          <rect x="29" y="33" width="1"  height="9"  fill="#0a0a0a"/>
+          <rect x="34" y="33" width="14" height="1"  fill="#0a0a0a"/>
+          <rect x="34" y="41" width="14" height="1"  fill="#0a0a0a"/>
+          <rect x="34" y="33" width="1"  height="9"  fill="#0a0a0a"/>
+          <rect x="47" y="33" width="1"  height="9"  fill="#0a0a0a"/>
+          <rect x="30" y="36" width="4"  height="2"  fill="#0a0a0a"/>
+          <!-- EYES -->
+          <g class="eyes-open">
+            <rect x="22" y="36" width="3" height="3" fill="#0a0a0a"/>
+            <rect x="40" y="36" width="3" height="3" fill="#0a0a0a"/>
+          </g>
+          <g class="eyes-wink">
+            <rect x="22" y="36" width="3" height="3" fill="#0a0a0a"/>
+            <rect x="39" y="38" width="6" height="1" fill="#0a0a0a"/>
+          </g>
+          <g class="eyes-squint">
+            <rect x="21" y="38" width="5" height="1" fill="#0a0a0a"/>
+            <rect x="39" y="38" width="5" height="1" fill="#0a0a0a"/>
+          </g>
+          <!-- NOSE -->
+          <rect x="30" y="42" width="4"  height="3" fill="#d49d6e"/>
+          <rect x="30" y="44" width="1"  height="1" fill="#a8754f"/>
+          <!-- MOUTH variants -->
+          <g class="mouth-normal">
+            <rect x="26" y="47" width="12" height="1" fill="#7a3a3a"/>
+          </g>
+          <g class="mouth-smile">
+            <rect x="26" y="47" width="12" height="2" fill="#7a3a3a"/>
+            <rect x="24" y="48" width="2"  height="1" fill="#7a3a3a"/>
+            <rect x="38" y="48" width="2"  height="1" fill="#7a3a3a"/>
+          </g>
+          <g class="mouth-stern">
+            <rect x="26" y="48" width="12" height="2" fill="#7a3a3a"/>
+            <rect x="24" y="47" width="2"  height="1" fill="#7a3a3a"/>
+            <rect x="38" y="47" width="2"  height="1" fill="#7a3a3a"/>
+          </g>
+          <g class="mouth-talk">
+            <rect x="27" y="47" width="10" height="3" fill="#3a1818"/>
+            <rect x="28" y="48" width="8"  height="1" fill="#7a3a3a"/>
+          </g>
+          <!-- NECK -->
+          <rect x="22" y="51" width="20" height="4" fill="#d49d6e"/>
+          <rect x="22" y="51" width="20" height="1" fill="#b8855f"/>
+          <!-- SHIRT collar -->
+          <rect x="14" y="55" width="36" height="6" fill="#f5f5f5"/>
+          <rect x="14" y="55" width="36" height="1" fill="#c8c8c8"/>
+          <polygon points="22,55 32,62 42,55" fill="#1f2a4d"/>
+          <!-- BOWTIE -->
+          <polygon points="26,57 32,61 26,65 22,63 22,59" fill="#c41e3a"/>
+          <polygon points="38,57 32,61 38,65 42,63 42,59" fill="#c41e3a"/>
+          <rect x="30" y="59" width="4"  height="3" fill="#8a1525"/>
+          <!-- JACKET -->
+          <rect x="6"  y="61" width="52" height="19" fill="#1f2a4d"/>
+          <polygon points="14,61 28,61 22,72" fill="#0c1530"/>
+          <polygon points="50,61 36,61 42,72" fill="#0c1530"/>
+          <rect x="48" y="66" width="4"  height="4" fill="#ffd75e"/>
+          <!-- jacket button -->
+          <rect x="31" y="74" width="2"  height="2" fill="#ffd75e"/>
+        </svg>
+      </div>
+
+      <div class="vn-speaker" id="speaker">巴菲特</div>
+      <div class="vn-dialogue" id="dialogue">
+        <div class="vn-text" id="vnText"></div>
+        <span class="vn-advance hide" id="vnAdvance">▼</span>
+      </div>
+      <div class="vn-choices" id="choices"></div>
+    </div>
+  </section>
+
+  <!-- ============ END ============ -->
+  <section id="end" class="screen">
+    <div class="pixel-box">
+      <div class="medal" id="medal">🎩</div>
+      <div class="tier-name" id="tierName">巴菲特弟子</div>
+      <div class="tier-desc" id="tierDesc">你已经具备初学者的"所有者眼光"。</div>
+      <div class="stats">
+        <div class="stat"><div class="v" id="finalScore">0</div><div class="k">最终积分</div></div>
+        <div class="stat"><div class="v" id="finalRight">0/10</div><div class="k">答对题数</div></div>
+        <div class="stat"><div class="v" id="bestStreak">0</div><div class="k">最高连对</div></div>
+      </div>
+      <div class="end-quote" id="endQuote">
+        "如果你不愿意持有一只股票 10 年，那就连 10 分钟都别持有它。" —— 沃伦·巴菲特
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn cream" id="restartBtn">↻ 再来一局</button>
+        <button class="btn-mini" id="endMenuBtn">🏠 返回目录</button>
+      </div>
+    </div>
+    <p class="footer-tip">投资有风险，本游戏不构成任何投资建议。</p>
+  </section>
+
+</div>
+
+<aside class="transcript-panel" id="transcriptPanel" aria-hidden="true">
+  <div class="transcript-head">
+    <span>📜 对话回顾</span>
+    <button class="transcript-close" id="transcriptClose">✕</button>
+  </div>
+  <div class="transcript-body" id="transcriptBody">
+    <div class="transcript-empty">还没有对话记录...</div>
+  </div>
+</aside>
+
+<script>
+/* ===================== AUDIO (typewriter blip) ===================== */
+let audioCtx = null;
+let audioOn = true;
+function ensureAudio(){
+  if (!audioCtx){
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ audioOn = false; }
+  }
+}
+function blip(){
+  if (!audioOn || !audioCtx) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = 'square';
+  o.frequency.value = 380 + Math.random()*60;
+  g.gain.setValueAtTime(0.025, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
+  o.connect(g).connect(audioCtx.destination);
+  o.start();
+  o.stop(audioCtx.currentTime + 0.05);
+}
+
+/* ===================== SCRIPT (story beats) ===================== */
+const SCRIPT = [
+  // ===== INTRO =====
+  {type:'say', emo:'smile',    text:'啊...你来了。坐吧，坐吧。'},
+  {type:'say', emo:'normal',   text:'我是沃伦·巴菲特——朋友们叫我"奥马哈的先知"。'},
+  {type:'say', emo:'wink',     text:'不过今天，我不会告诉你"明天买什么涨"。'},
+  {type:'say', emo:'normal',   text:'我会用 10 个小问题，让你看见——金钱真正的样子。'},
+  {type:'say', emo:'thinking', text:'准备好了？那我们从最基础的开始。'},
+  {type:'say', emo:'smile',    text:'点一下对话框，我就继续讲下去。'},
+
+  // ===== Q1: 股票本质 =====
+  {type:'chapter', n:1, title:'股票是什么'},
+  {type:'say', emo:'normal', text:'你邻居小明开了家柠檬水摊。🍋'},
+  {type:'say', emo:'normal', text:'本钱要 100 元——他没钱，于是把摊子拆成 10 份，每份 10 元，卖给街坊。'},
+  {type:'say', emo:'normal', text:'你花 10 元买了 1 份。第二年，摊子赚了 50 元利润。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'那么... 你手里这 1 份，本质上代表什么？',
+    options:[
+      '小明欠你 10 元的借条',
+      '柠檬水摊 1/10 的所有权',
+      '一张可以转卖的凭证',
+      '未来分红的额度'
+    ],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'漂亮！这就是华尔街最常忘记的事。'},
+      {type:'quote', emo:'wink', text:'买股票，就是买公司的一部分。我从不把它们看作纸条——而是一家家真实的生意。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'慢着，再想想。'},
+      {type:'say', emo:'normal', text:'借条是"债权"——那是债券；"凭证"是投机者视角；"分红额度"漏掉了股东的剩余财产权和表决权。'},
+      {type:'say', emo:'normal', text:'股票 = 公司所有权的小切片。这个观念，是一切的起点。'}
+    ]
+  },
+
+  // ===== Q2: PE =====
+  {type:'chapter', n:2, title:'几年回本：PE'},
+  {type:'say', emo:'normal',   text:'升级一点。'},
+  {type:'say', emo:'normal',   text:'一只股票股价 100 元，公司每股每年赚 10 元利润。'},
+  {type:'say', emo:'thinking', text:'华尔街用一个简单公式判断"贵不贵"——叫 PE，市盈率。'},
+  {type:'say', emo:'normal',   text:'PE = 股价 ÷ 每股利润。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'那么，这个 PE 是多少？意味着什么？',
+    options:[
+      'PE=10，按当前利润 10 年回本',
+      'PE=10，意味着每年回报率 10 倍',
+      'PE=0.1，越低越便宜',
+      'PE=100，价格是利润的 100 倍'
+    ],
+    correct:0,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'没错。PE 最直觉的含义就是——"几年靠利润回本"。'},
+      {type:'quote', emo:'normal', text:'价格是你付的，价值是你得的。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'再算一次：100 ÷ 10 = 10。'},
+      {type:'say', emo:'normal', text:'这个"10"的含义是：假设利润不变，约 10 年靠利润回本。'},
+      {type:'say', emo:'normal', text:'但别死记 PE——高增长公司理应贵些，夕阳行业便宜得有理由。'}
+    ]
+  },
+
+  // ===== Q3: 股价 vs 市值 =====
+  {type:'chapter', n:3, title:'低价的幻觉'},
+  {type:'say', emo:'normal',   text:'我见过太多人，栽在这个坑里。'},
+  {type:'say', emo:'normal',   text:'小红打开 App，看到 A 股价 5 元，B 股价 500 元。'},
+  {type:'say', emo:'wink',     text:'她想："A 才 5 块，肯定便宜，买！"'},
+  {type:'say', emo:'normal',   text:'但你再看：A 总股本 100 亿股，B 总股本 1 亿股。两家去年都赚了 20 亿。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'小红的判断哪里错了？',
+    options:[
+      '没错，低价股下跌空间小',
+      '应看市值（股价×总股本）和 PE',
+      '应该看哪个最近涨得多',
+      'B 股本少更稀缺，必然更贵'
+    ],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'完全正确。两家市值都是 500 亿——"一样大、一样贵"。'},
+      {type:'quote', emo:'wink', text:'用合理价格买一家好公司，远胜于用便宜价格买一家平庸公司。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'算给你看：'},
+      {type:'say', emo:'normal', text:'A 市值 = 5 × 100 = 500 亿；B 市值 = 500 × 1 = 500 亿。一样大。'},
+      {type:'say', emo:'normal', text:'茅台一股 1500、五粮液一股 150，但茅台市值大得多。看市值，别被股价数字迷惑。'}
+    ]
+  },
+
+  // ===== Q4: 留存利润 =====
+  {type:'chapter', n:4, title:'留存的力量'},
+  {type:'say', emo:'normal', text:'假设你持有的公司，今年赚了 10 亿。'},
+  {type:'say', emo:'normal', text:'董事会决定 100% 留存——一分钱不分给股东。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'作为股东，你"亏"了吗？',
+    options:[
+      '亏了，没拿到现金等于没赚',
+      '没亏，留存利润进入净资产，理论上每股内在价值上升',
+      '亏了，公司必须按法律分红',
+      '无所谓，与股东无关'
+    ],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'你已经在用所有者的眼光看问题了。'},
+      {type:'quote', emo:'wink', text:'我们更倾向于让 1 美元的留存利润，在市场上变成 1 美元以上的市值。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'换个角度想：'},
+      {type:'say', emo:'normal', text:'留存利润 = 公司替你再投资。如果它能用得更好，比给你更划算。'},
+      {type:'say', emo:'normal', text:'伯克希尔从不分红——因为我相信我能把这笔钱用得更好。'}
+    ]
+  },
+
+  // ===== Q5: 股息率 =====
+  {type:'chapter', n:5, title:'分红的真值'},
+  {type:'say', emo:'normal', text:'简单算术。'},
+  {type:'say', emo:'normal', text:'某股票股价 50 元，每年每股分红 2.5 元。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'股息率（Dividend Yield）是多少？',
+    options:['2.5%','5%','20%','50%'],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'对，2.5 ÷ 50 = 5%。把它和银行利率横向比，你就懂"现金回报"在哪。'},
+      {type:'quote', emo:'normal', text:'稳定增长的股息，是检验一家公司是否真正赚钱的试金石。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'公式：股息率 = 每股分红 ÷ 股价。'},
+      {type:'say', emo:'normal', text:'2.5 ÷ 50 = 5%。这是"不卖出、纯靠分红"每年能拿到的现金回报率。'}
+    ]
+  },
+
+  // ===== Q6: 净资产 =====
+  {type:'chapter', n:6, title:'家底有多少'},
+  {type:'say', emo:'normal',   text:'我们读一张资产负债表。'},
+  {type:'say', emo:'normal',   text:'某公司：现金 1 亿、存货 5000 万、设备 3000 万、总负债 1 亿。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'它的净资产（股东权益）是多少？',
+    options:['1.8 亿','8000 万','1 亿','2.8 亿'],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'算得快。这就是"今天清算，股东能分到的家底"。'},
+      {type:'quote', emo:'wink', text:'我喜欢简单的生意，简单到我能在一张餐巾纸背面算清楚账。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'公式：净资产 = 总资产 − 总负债。'},
+      {type:'say', emo:'normal', text:'总资产 = 1亿 + 5000万 + 3000万 = 1.8亿。\n减去负债 1 亿，净资产 = 8000 万。'}
+    ]
+  },
+
+  // ===== Q7: 现金流 =====
+  {type:'chapter', n:7, title:'真公司 vs 假公司'},
+  {type:'say', emo:'normal',   text:'这一题，是分辨"真公司"和"假公司"的金钥匙。'},
+  {type:'say', emo:'normal',   text:'某公司净利润连续 3 年增长。'},
+  {type:'say', emo:'thinking', text:'但... 经营现金流，连续 3 年为负。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'这最可能说明什么？',
+    options:[
+      '公司发展势头很好，可以放心买入',
+      '利润可能是"纸面富贵"，警惕应收账款堆积或造假',
+      '现金流和投资者无关',
+      '说明公司在大量分红'
+    ],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'你已经懂得，不被表面利润骗了。'},
+      {type:'quote', emo:'wink', text:'现金从不说谎。利润是观点，现金是事实。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'这是华尔街最大的陷阱之一。'},
+      {type:'say', emo:'normal', text:'利润是"会计算出来"的；现金流是"真金白银收进来"的。'},
+      {type:'say', emo:'normal', text:'两者长期背离，要么是收不回钱，要么是数字注水。'}
+    ]
+  },
+
+  // ===== Q8: 限价单 =====
+  {type:'chapter', n:8, title:'纪律的工具'},
+  {type:'say', emo:'normal',   text:'实操题。'},
+  {type:'say', emo:'normal',   text:'你想以"最多 50 元"的价格买入某股，超过这个价格宁可不买。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'应该用什么订单类型？',
+    options:[
+      '市价单（按当前市场价立刻成交）',
+      '限价单（指定不超过 50 元才买入）',
+      '止损单（价格跌破触发卖出）',
+      '夜市单（只在盘后撮合）'
+    ],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'干净利落。初学者就该默认用限价单。'},
+      {type:'quote', emo:'normal', text:'在投资里，纪律比聪明更重要。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'记住区别：'},
+      {type:'say', emo:'normal', text:'市价单 = 立刻成交，但行情剧烈时可能远高于你的心理价位。'},
+      {type:'say', emo:'normal', text:'限价单 = 你说了算价格，可能不成交，但绝不买贵。'}
+    ]
+  },
+
+  // ===== Q9: 集中 vs 分散 =====
+  {type:'chapter', n:9, title:'鸡蛋与篮子'},
+  {type:'say', emo:'normal', text:'小李把 100 万，全部押在一只股票上。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'他面临的最大风险是什么？',
+    options:[
+      '手续费太高',
+      '个股黑天鹅风险——单一公司事故可能让本金大幅缩水',
+      '没什么风险，集中持仓是巴菲特的做法',
+      '买不到足够多的股数'
+    ],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'聪明人都怕"单一标的归零"。'},
+      {type:'quote', emo:'wink', text:'分散投资是无知者的保护伞。但承认无知，是大多数人的明智之选。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'别把我的话当借口。'},
+      {type:'say', emo:'normal', text:'即使是好公司，也可能突然崩盘——瑞幸、恒大都是教训。'},
+      {type:'say', emo:'normal', text:'我集中持仓，前提是研究得比 99% 的人深。你呢？'}
+    ]
+  },
+
+  // ===== Q10: 复利 =====
+  {type:'chapter', n:10, title:'雪球的秘密'},
+  {type:'say', emo:'smile',    text:'最后一题——也是我最爱的算式。'},
+  {type:'say', emo:'normal',   text:'1 万元，年化 10%，复利 30 年。'},
+  {type:'ask',
+    emo:'thinking',
+    text:'最终大约变成多少？',
+    options:['约 4 万元','约 17.4 万元','约 50 万元','约 100 万元'],
+    correct:1,
+    onCorrect:[
+      {type:'say', emo:'smile', text:'对！1 × 1.1 的 30 次方 ≈ 17.45 万。'},
+      {type:'say', emo:'normal', text:'再加 10 年，是 45 万；再加 20 年，是 117 万。'},
+      {type:'say', emo:'wink', text:'这就是为什么——我 99% 的财富，都是 50 岁之后赚到的。'},
+      {type:'quote', emo:'smile', text:'人生就像滚雪球——重要的是找到很湿的雪，和很长的坡。'}
+    ],
+    onWrong:[
+      {type:'say', emo:'stern', text:'1 × 1.1^30 ≈ 17.45 万。'},
+      {type:'say', emo:'normal', text:'时间，是复利最强的燃料。别小看 10 年——它的尽头是另一个世界。'}
+    ]
+  },
+
+  // ===== CLOSING =====
+  {type:'say', emo:'smile', text:'10 道题结束了。'},
+  {type:'say', emo:'normal', text:'你今天没赚到一分钱——但你看清了金钱的几道真实纹路。'},
+  {type:'say', emo:'wink', text:'这，比明年涨 30% 更值钱。'},
+  {type:'say', emo:'smile', text:'走吧。下次见面，希望你已是一位真正的所有者。'},
+  {type:'end'}
+];
+
+/* ===================== STATE ===================== */
+const state = {
+  beat:0, score:0, hp:3, streak:0, bestStreak:0, rightCount:0,
+  qIndex:0, // current question number (1..10)
+  totalQ:10,
+  // dialogue runtime
+  typing:false, fullText:'', isQuote:false,
+  // branch stack: when entering onCorrect/onWrong sub-array, push return point
+  branchStack:[],
+  // running transcript log
+  transcript:[]
+};
+
+/* ===================== DOM ===================== */
+const $ = (id)=>document.getElementById(id);
+const screens = {title:$('title'), game:$('game'), end:$('end')};
+function showScreen(name){
+  Object.values(screens).forEach(s=>s.classList.remove('active'));
+  screens[name].classList.add('active');
+}
+
+/* ===================== START / RESET ===================== */
+$('startBtn').addEventListener('click', () => {
+  ensureAudio();
+  resetState();
+  showScreen('game');
+  playBeat();
+});
+$('restartBtn').addEventListener('click', () => {
+  resetState();
+  showScreen('game');
+  playBeat();
+});
+$('menuBtn').addEventListener('click', () => {
+  if (state.beat > 0 || state.score > 0){
+    if (!confirm('当前进度会丢失，确定返回目录？')) return;
+  }
+  resetState();
+  showScreen('title');
+});
+$('endMenuBtn').addEventListener('click', () => {
+  resetState();
+  showScreen('title');
+});
+
+function resetState(){
+  state.beat = 0; state.score = 0; state.hp = 3;
+  state.streak = 0; state.bestStreak = 0; state.rightCount = 0;
+  state.qIndex = 0;
+  state.typing = false; state.fullText = ''; state.isQuote = false;
+  state.branchStack = [];
+  state.transcript = [];
+  $('score').textContent = '0';
+  $('heartsBox').innerHTML = '<span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>';
+  $('progressBar').style.width = '0%';
+  $('progressLabel').textContent = 'PROLOGUE';
+  $('vnText').textContent = '';
+  $('vnAdvance').classList.add('hide');
+  $('choices').classList.remove('show');
+  $('choices').innerHTML = '';
+  $('transcriptPanel').classList.remove('show');
+  renderTranscript();
+  setEmotion('normal');
+}
+
+/* ===================== TRANSCRIPT ===================== */
+function escapeHTML(s){
+  return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function record(entry){
+  state.transcript.push(entry);
+  if ($('transcriptPanel').classList.contains('show')) renderTranscript();
+}
+function renderTranscript(){
+  const el = $('transcriptBody');
+  if (!state.transcript.length){
+    el.innerHTML = '<div class="transcript-empty">还没有对话记录...<br/>开始对话后内容会出现在这里。</div>';
+    return;
+  }
+  el.innerHTML = state.transcript.map(t => {
+    if (t.type === 'chapter')
+      return `<div class="transcript-chapter">▼ ${escapeHTML(t.text)}</div>`;
+    if (t.type === 'quote')
+      return `<div class="transcript-entry quote">${escapeHTML(t.text)}</div>`;
+    if (t.type === 'ask'){
+      const opts = t.options.map((o,i) =>
+        `<div class="transcript-opt">${'ABCD'[i]}. ${escapeHTML(o)}</div>`
+      ).join('');
+      return `<div class="transcript-entry ask"><b>Q：</b>${escapeHTML(t.text)}${opts}</div>`;
+    }
+    if (t.type === 'choice')
+      return `<div class="transcript-entry choice ${t.correct?'right':'wrong'}">→ 你选：${escapeHTML(t.text)} ${t.correct?'✓':'✗'}</div>`;
+    return `<div class="transcript-entry">${escapeHTML(t.text)}</div>`;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+$('transcriptBtn').addEventListener('click', () => {
+  const p = $('transcriptPanel');
+  p.classList.toggle('show');
+  if (p.classList.contains('show')) renderTranscript();
+});
+$('transcriptClose').addEventListener('click', () => {
+  $('transcriptPanel').classList.remove('show');
+});
+
+/* ===================== EMOTION ===================== */
+function setEmotion(emo){
+  const b = $('buffett');
+  b.classList.remove('emo-normal','emo-smile','emo-wink','emo-stern','emo-thinking');
+  b.classList.add('emo-' + (emo || 'normal'));
+}
+function setTalking(on){
+  $('buffett').classList.toggle('talking', !!on);
+}
+
+/* ===================== BEAT ENGINE ===================== */
+function currentList(){
+  // if inside a branch, return that array; otherwise SCRIPT
+  if (state.branchStack.length){
+    const top = state.branchStack[state.branchStack.length - 1];
+    return top.list;
+  }
+  return SCRIPT;
+}
+function currentIdx(){
+  if (state.branchStack.length){
+    return state.branchStack[state.branchStack.length - 1].idx;
+  }
+  return state.beat;
+}
+function setIdx(i){
+  if (state.branchStack.length){
+    state.branchStack[state.branchStack.length - 1].idx = i;
+  } else {
+    state.beat = i;
+  }
+}
+
+function playBeat(){
+  // game over check — only at top level so branch dialogue can finish
+  if (state.hp <= 0 && !state.branchStack.length){
+    goEnd(true); return;
+  }
+  // pop empty branches
+  while (state.branchStack.length){
+    const top = state.branchStack[state.branchStack.length - 1];
+    if (top.idx >= top.list.length){
+      state.branchStack.pop();
+      // resume parent flow: advance past the ask
+      if (!state.branchStack.length){
+        state.beat = state.beat + 1;
+      } else {
+        const p = state.branchStack[state.branchStack.length-1];
+        p.idx += 1;
+      }
+    } else break;
+  }
+
+  const list = currentList();
+  const i = currentIdx();
+  if (i >= list.length){
+    // top-level finished
+    if (!state.branchStack.length){ goEnd(false); return; }
+  }
+  const beat = list[i];
+  if (!beat){ goEnd(false); return; }
+
+  if (beat.type === 'chapter'){
+    state.qIndex = beat.n;
+    $('progressLabel').textContent = `第 ${beat.n} / ${state.totalQ} 关 · ${beat.title}`;
+    $('progressBar').style.width = ((beat.n - 1) / state.totalQ * 100) + '%';
+    record({type:'chapter', text:`第 ${beat.n} / ${state.totalQ} 关 · ${beat.title}`});
+    setIdx(i + 1);
+    playBeat();
+    return;
+  }
+  if (beat.type === 'say' || beat.type === 'quote'){
+    state.isQuote = (beat.type === 'quote');
+    setEmotion(beat.emo);
+    $('choices').classList.remove('show');
+    $('choices').innerHTML = '';
+    record({type:beat.type, text:beat.text});
+    speakText(beat.text);
+    return;
+  }
+  if (beat.type === 'ask'){
+    setEmotion(beat.emo || 'thinking');
+    state.isQuote = false;
+    $('choices').classList.remove('show');
+    $('choices').innerHTML = '';
+    record({type:'ask', text:beat.text, options:beat.options});
+    speakText(beat.text, () => showChoices(beat));
+    return;
+  }
+  if (beat.type === 'end'){
+    goEnd(false);
+    return;
+  }
+  // unknown beat — skip
+  setIdx(i + 1);
+  playBeat();
+}
+
+function advanceBeat(){
+  // move to next beat (within current list)
+  const i = currentIdx();
+  setIdx(i + 1);
+  playBeat();
+}
+
+/* ===================== TYPEWRITER ===================== */
+let typeTimer = null;
+function speakText(text, onDone){
+  const el = $('vnText');
+  el.classList.toggle('quote', state.isQuote);
+  state.fullText = text;
+  state.typing = true;
+  el.innerHTML = '';
+  $('vnAdvance').classList.add('hide');
+  setTalking(true);
+
+  let i = 0;
+  const speed = state.isQuote ? 50 : 28; // ms per char
+  clearTimeout(typeTimer);
+
+  function step(){
+    if (!state.typing){ // skipped
+      el.textContent = state.fullText;
+      finish();
+      return;
+    }
+    if (i >= text.length){ finish(); return; }
+    const ch = text[i++];
+    el.textContent += ch;
+    if (i % 3 === 0 && ch !== ' ' && ch !== '\n') blip();
+    typeTimer = setTimeout(step, speed);
+  }
+  function finish(){
+    state.typing = false;
+    setTalking(false);
+    if (onDone){
+      onDone();
+    } else {
+      $('vnAdvance').classList.remove('hide');
+    }
+  }
+  step();
+}
+
+function skipOrAdvance(){
+  if (state.typing){
+    // skip to end
+    state.typing = false;
+    clearTimeout(typeTimer);
+    $('vnText').textContent = state.fullText;
+    setTalking(false);
+    // is this an ask beat? if so, show choices now
+    const list = currentList();
+    const beat = list[currentIdx()];
+    if (beat && beat.type === 'ask'){ showChoices(beat); }
+    else { $('vnAdvance').classList.remove('hide'); }
+    return;
+  }
+  // not typing: advance only if no choices waiting
+  if ($('choices').classList.contains('show')) return;
+  advanceBeat();
+}
+
+$('dialogue').addEventListener('click', skipOrAdvance);
+
+/* ===================== CHOICES ===================== */
+function showChoices(beat){
+  const box = $('choices');
+  box.innerHTML = '';
+  const keys = ['1','2','3','4'];
+  beat.options.forEach((text, idx) => {
+    const b = document.createElement('button');
+    b.className = 'vn-choice';
+    b.dataset.key = keys[idx];
+    b.textContent = text;
+    b.addEventListener('click', (e) => { e.stopPropagation(); onChoice(beat, idx, b); });
+    box.appendChild(b);
+  });
+  box.classList.add('show');
+  $('vnAdvance').classList.add('hide');
+}
+
+function onChoice(beat, idx, btn){
+  // lock all
+  const buttons = $('choices').querySelectorAll('.vn-choice');
+  buttons.forEach((b, i) => {
+    b.classList.add('locked');
+    if (i === beat.correct) b.classList.add('correct');
+    else if (i === idx) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+
+  const correct = (idx === beat.correct);
+  record({type:'choice', text:beat.options[idx], correct});
+  if (correct){
+    state.streak += 1;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    state.rightCount += 1;
+    const gain = 100 + Math.max(0, state.streak - 1) * 20;
+    flyBag(btn, () => {
+      animateScore(state.score, state.score + gain, 600);
+      state.score += gain;
+      $('pocket').classList.add('bump');
+      setTimeout(()=>$('pocket').classList.remove('bump'), 400);
+      spawnScorePop(`+${gain}`);
+    });
+  } else {
+    state.streak = 0;
+    state.hp -= 1;
+    const hearts = document.querySelectorAll('#heartsBox .heart');
+    if (hearts[state.hp]) hearts[state.hp].classList.add('losing');
+  }
+
+  // update progress bar to show this question done
+  $('progressBar').style.width = (state.qIndex / state.totalQ * 100) + '%';
+
+  // enter branch
+  setTimeout(() => {
+    $('choices').classList.remove('show');
+    const branchList = correct ? beat.onCorrect : beat.onWrong;
+    state.branchStack.push({ list: branchList || [], idx: 0 });
+    // also check HP for game over
+    playBeat();
+  }, correct ? 1100 : 700);
+}
+
+/* ===================== EFFECTS ===================== */
+function flyBag(originEl, onArrive){
+  const bag = document.createElement('div');
+  bag.className = 'bag';
+  bag.textContent = '💰';
+  document.body.appendChild(bag);
+
+  const r = originEl.getBoundingClientRect();
+  const startX = r.left + r.width/2;
+  const startY = r.top + r.height/2;
+  const pocket = $('pocket').getBoundingClientRect();
+  const endX = pocket.left + pocket.width/2;
+  const endY = pocket.top + pocket.height/2;
+
+  bag.style.left = startX + 'px';
+  bag.style.top = startY + 'px';
+  bag.style.setProperty('--tx', (endX - startX) + 'px');
+  bag.style.setProperty('--ty', (endY - startY) + 'px');
+  void bag.offsetWidth;
+  bag.classList.add('fly');
+  setTimeout(onArrive, 850);
+  setTimeout(()=> bag.remove(), 1200);
+}
+
+function animateScore(from, to, duration){
+  const el = $('score');
+  const start = performance.now();
+  function step(t){
+    const p = Math.min(1, (t - start) / duration);
+    const v = Math.floor(from + (to - from) * p);
+    el.textContent = v;
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function spawnScorePop(text){
+  const pocket = $('pocket').getBoundingClientRect();
+  const pop = document.createElement('div');
+  pop.className = 'score-pop';
+  pop.textContent = text;
+  pop.style.left = (pocket.left + pocket.width/2) + 'px';
+  pop.style.top = (pocket.top - 10) + 'px';
+  document.body.appendChild(pop);
+  setTimeout(()=> pop.remove(), 950);
+}
+
+/* ===================== END SCREEN ===================== */
+function goEnd(failed){
+  $('finalScore').textContent = state.score;
+  $('finalRight').textContent = `${state.rightCount}/${state.totalQ}`;
+  $('bestStreak').textContent = state.bestStreak;
+
+  let tier, desc, icon, quote;
+  if (failed || state.hp <= 0){
+    tier = '青铜 · 重头来过';
+    desc = '生命值耗尽。但每个错误都是教材——再来一次会更强。';
+    icon = '💔';
+    quote = '"在投资中，舒适和回报通常不会同时出现。" —— 巴菲特';
+  } else if (state.rightCount === state.totalQ){
+    tier = '巴菲特弟子';
+    desc = '满分通关——你已具备初学者的"所有者眼光"。';
+    icon = '🎩';
+    quote = '"如果你不愿意持有一只股票 10 年，那就连 10 分钟都别持有它。" —— 巴菲特';
+  } else if (state.rightCount >= 8){
+    tier = '黄金 · 价值投资者';
+    desc = '基础概念扎实，再深入财报与估值即可登堂入室。';
+    icon = '🥇';
+    quote = '"风险来自你不知道自己在做什么。" —— 巴菲特';
+  } else if (state.rightCount >= 5){
+    tier = '白银 · 入门交易者';
+    desc = '看懂了股票本质，离稳健投资还差几个核心概念。';
+    icon = '🥈';
+    quote = '"我们最喜欢的持有期是：永远。" —— 巴菲特';
+  } else {
+    tier = '青铜 · 好奇的学徒';
+    desc = '种子已经埋下。建议重玩一遍，重点听巴菲特对错题的解释。';
+    icon = '🥉';
+    quote = '"投资其实很简单，但并不容易。" —— 巴菲特';
+  }
+  $('tierName').textContent = tier;
+  $('tierDesc').textContent = desc;
+  $('medal').textContent = icon;
+  $('endQuote').textContent = quote;
+  showScreen('end');
+}
+
+/* ===================== KEYBOARD ===================== */
+document.addEventListener('keydown', (e) => {
+  if (screens.game.classList.contains('active')){
+    if (['1','2','3','4'].includes(e.key)){
+      const idx = parseInt(e.key,10) - 1;
+      const choices = document.querySelectorAll('.vn-choice:not(.locked)');
+      if (choices[idx]) choices[idx].click();
+      return;
+    }
+    if (e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      skipOrAdvance();
+    }
+  } else if (screens.title.classList.contains('active') && (e.key === 'Enter' || e.key === ' ')){
+    $('startBtn').click();
+  }
+});
+
+</script>
+</body>
+</html>
